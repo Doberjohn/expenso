@@ -1,0 +1,15 @@
+{
+  "name": "expenso",
+  "version": "1.0.0",
+  "private": true,
+  "codegenConfig": {
+    "name": "ExpensoSpecs",
+    "type": "modules",
+    "jsSrcsDir": "ReactNativeModule",
+    "ios": {
+      "modulesProvider": {
+        "path": ""
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "expenso",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "react-native-reanimated": "file:ReactNativeModule/node_modules/react-native-reanimated",
+    "react-native-gesture-handler": "file:ReactNativeModule/node_modules/react-native-gesture-handler"
+  },
+  "codegenConfig": {
+    "name": "ExpensoSpecs",
+    "type": "all",
+    "jsSrcsDir": "ReactNativeModule",
+    "ios": {
+      "modulesProvider": {
+        "path": ""
+      }
+    }
+  }
+}
