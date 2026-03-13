@@ -2,6 +2,7 @@
   "name": "ExpensoRNModule",
   "version": "1.0.0",
   "private": true,
+  "main": "src/index.js",
   "dependencies": {
     "lucide-react-native": "^0.475.0",
     "react": "19.0.0",
