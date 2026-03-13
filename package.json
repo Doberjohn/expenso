@@ -5,7 +5,7 @@
   "codegenConfig": {
     "name": "ExpensoSpecs",
     "type": "modules",
-    "jsSrcsDir": "ReactNativeModule",
+    "jsSrcsDir": "ReactNativeModule/src",
     "ios": {
       "modulesProvider": {
         "path": ""
