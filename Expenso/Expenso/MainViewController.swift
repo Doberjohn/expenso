@@ -40,6 +40,9 @@ class MainViewController: UIViewController, AddEntryDelegate {
     }
 
     private func setupUI() {
+        let pad = Theme.contentPadding
+        let gap = Theme.sectionGap
+
         // Header
         let greetingLabel = UILabel()
         greetingLabel.text = "Good morning,"
@@ -54,20 +57,15 @@ class MainViewController: UIViewController, AddEntryDelegate {
         let headerTextStack = UIStackView(arrangedSubviews: [greetingLabel, namesLabel])
         headerTextStack.axis = .vertical
         headerTextStack.spacing = 2
+        headerTextStack.translatesAutoresizingMaskIntoConstraints = false
 
         let bellButton = UIButton(type: .system)
         bellButton.setImage(UIImage(systemName: "bell"), for: .normal)
         bellButton.tintColor = Theme.dark
-
-        let headerStack = UIStackView(arrangedSubviews: [headerTextStack, bellButton])
-        headerStack.axis = .horizontal
-        headerStack.distribution = .equalSpacing
-        headerStack.alignment = .center
-        headerStack.setContentHuggingPriority(.required, for: .vertical)
+        bellButton.translatesAutoresizingMaskIntoConstraints = false
 
         // Balance card
         balanceCard.translatesAutoresizingMaskIntoConstraints = false
-        balanceCard.setContentHuggingPriority(.required, for: .vertical)
 
         // Action buttons
         let expenseBtn = ActionButton(title: "Expense", sfSymbol: "minus",
@@ -82,44 +80,63 @@ class MainViewController: UIViewController, AddEntryDelegate {
         buttonsStack.axis = .horizontal
         buttonsStack.spacing = Theme.gap
         buttonsStack.distribution = .fillEqually
+        buttonsStack.translatesAutoresizingMaskIntoConstraints = false
 
         // Transactions header
         let txnTitle = UILabel()
         txnTitle.text = "Transactions"
         txnTitle.font = Theme.headingFont(size: 18)
         txnTitle.textColor = Theme.dark
+        txnTitle.translatesAutoresizingMaskIntoConstraints = false
 
         let seeAllLabel = UILabel()
         seeAllLabel.text = "See all"
         seeAllLabel.font = Theme.bodyMediumFont(size: 13)
         seeAllLabel.textColor = Theme.coral
+        seeAllLabel.translatesAutoresizingMaskIntoConstraints = false
 
-        let txnHeaderStack = UIStackView(arrangedSubviews: [txnTitle, seeAllLabel])
-        txnHeaderStack.axis = .horizontal
-        txnHeaderStack.distribution = .equalSpacing
-
-        // RN container — should expand to fill remaining space
+        // RN container
         rnContainer.translatesAutoresizingMaskIntoConstraints = false
         rnContainer.backgroundColor = .clear
-        rnContainer.setContentHuggingPriority(.defaultLow, for: .vertical)
-        rnContainer.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
 
-        // Main stack
-        let mainStack = UIStackView(arrangedSubviews: [
-            headerStack, balanceCard, buttonsStack, txnHeaderStack, rnContainer
-        ])
-        mainStack.axis = .vertical
-        mainStack.spacing = Theme.sectionGap
-        mainStack.translatesAutoresizingMaskIntoConstraints = false
+        // Add subviews directly — avoids UIStackView ambiguity with views
+        // that lack intrinsic content size (balanceCard, rnContainer)
+        view.addSubview(headerTextStack)
+        view.addSubview(bellButton)
+        view.addSubview(balanceCard)
+        view.addSubview(buttonsStack)
+        view.addSubview(txnTitle)
+        view.addSubview(seeAllLabel)
+        view.addSubview(rnContainer)
 
-        view.addSubview(mainStack)
         NSLayoutConstraint.activate([
-            mainStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            mainStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Theme.contentPadding),
-            mainStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Theme.contentPadding),
-            mainStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            // Header — pinned to safe area top
+            headerTextStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            headerTextStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: pad),
+            bellButton.centerYAnchor.constraint(equalTo: headerTextStack.centerYAnchor),
+            bellButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -pad),
 
-            rnContainer.heightAnchor.constraint(greaterThanOrEqualToConstant: 200),
+            // Balance card
+            balanceCard.topAnchor.constraint(equalTo: headerTextStack.bottomAnchor, constant: gap),
+            balanceCard.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: pad),
+            balanceCard.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -pad),
+
+            // Action buttons
+            buttonsStack.topAnchor.constraint(equalTo: balanceCard.bottomAnchor, constant: gap),
+            buttonsStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: pad),
+            buttonsStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -pad),
+
+            // Transactions header
+            txnTitle.topAnchor.constraint(equalTo: buttonsStack.bottomAnchor, constant: gap),
+            txnTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: pad),
+            seeAllLabel.centerYAnchor.constraint(equalTo: txnTitle.centerYAnchor),
+            seeAllLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -pad),
+
+            // RN container fills remaining space
+            rnContainer.topAnchor.constraint(equalTo: txnTitle.bottomAnchor, constant: Theme.gap),
+            rnContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: pad),
+            rnContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -pad),
+            rnContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
         ])
     }
 
