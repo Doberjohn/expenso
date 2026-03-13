@@ -11,5 +11,8 @@ module.exports = {
     'react-native-gesture-handler': {
       root: './ReactNativeModule/node_modules/react-native-gesture-handler',
     },
+    'react-native-svg': {
+      root: './ReactNativeModule/node_modules/react-native-svg',
+    },
   },
 };

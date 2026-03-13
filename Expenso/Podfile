@@ -12,7 +12,6 @@ target 'Expenso' do
 
   pod 'RNReanimated', :path => '../ReactNativeModule/node_modules/react-native-reanimated'
   pod 'RNGestureHandler', :path => '../ReactNativeModule/node_modules/react-native-gesture-handler'
-  pod 'RNSVG', :path => '../ReactNativeModule/node_modules/react-native-svg'
 
   post_install do |installer|
     react_native_post_install(
