@@ -33,9 +33,25 @@ class MainViewController: UIViewController, AddEntryDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        additionalSafeAreaInsets = .zero
         setupUI()
         startFirestore()
         setupReactNative()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // Debug: log safe area to verify correctness — remove once confirmed
+        print("[Layout Debug] safeAreaInsets=\(view.safeAreaInsets), additional=\(additionalSafeAreaInsets)")
+    }
+
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        // Prevent any external code from inflating safe area
+        if additionalSafeAreaInsets != .zero {
+            print("[Layout Debug] Resetting additionalSafeAreaInsets from \(additionalSafeAreaInsets)")
+            additionalSafeAreaInsets = .zero
+        }
     }
 
     private func setupUI() {
@@ -99,6 +115,7 @@ class MainViewController: UIViewController, AddEntryDelegate {
         // RN container
         rnContainer.translatesAutoresizingMaskIntoConstraints = false
         rnContainer.backgroundColor = .clear
+        rnContainer.clipsToBounds = true
 
         // Add subviews directly — avoids UIStackView ambiguity with views
         // that lack intrinsic content size (balanceCard, rnContainer)
