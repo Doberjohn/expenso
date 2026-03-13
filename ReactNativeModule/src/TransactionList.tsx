@@ -38,6 +38,8 @@ export default function TransactionList({ transactions: initialTransactions }: P
         setTransactions(data);
       }
     );
+    // Listener is now registered — ask native for any cached transactions
+    TransactionBridge.requestTransactions();
     return () => subscription.remove();
   }, []);
 

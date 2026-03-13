@@ -10,4 +10,5 @@
 
 @interface RCT_EXTERN_MODULE(TransactionBridge, RCTEventEmitter)
 RCT_EXTERN_METHOD(deleteTransaction:(NSString *)id)
+RCT_EXTERN_METHOD(requestTransactions)
 @end
