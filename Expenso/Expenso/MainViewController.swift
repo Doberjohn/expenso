@@ -66,6 +66,8 @@ class MainViewController: UIViewController, AddEntryDelegate {
 
         // Balance card
         balanceCard.translatesAutoresizingMaskIntoConstraints = false
+        balanceCard.setContentHuggingPriority(.required, for: .vertical)
+        balanceCard.setContentCompressionResistancePriority(.required, for: .vertical)
 
         // Action buttons
         let expenseBtn = ActionButton(title: "Expense", sfSymbol: "minus",

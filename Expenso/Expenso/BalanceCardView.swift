@@ -25,6 +25,16 @@ class BalanceCardView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override var intrinsicContentSize: CGSize {
+        layoutIfNeeded()
+        let titleH = titleLabel.intrinsicContentSize.height
+        let amountH = amountLabel.intrinsicContentSize.height
+        let badgeH: CGFloat = 28
+        // 20 top + title + 12 + amount + 12 + badge + 20 bottom
+        let height = 20 + titleH + 12 + amountH + 12 + badgeH + 20
+        return CGSize(width: UIView.noIntrinsicMetric, height: height)
+    }
+
     private func setupUI() {
         backgroundColor = Theme.purple
         layer.cornerRadius = Theme.cardRadius
@@ -68,7 +78,6 @@ class BalanceCardView: UIView {
 
             badgeContainer.topAnchor.constraint(equalTo: amountLabel.bottomAnchor, constant: 12),
             badgeContainer.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            badgeContainer.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20),
 
             badgeIcon.leadingAnchor.constraint(equalTo: badgeContainer.leadingAnchor, constant: 10),
             badgeIcon.centerYAnchor.constraint(equalTo: badgeContainer.centerYAnchor),
@@ -80,9 +89,14 @@ class BalanceCardView: UIView {
             badgeLabel.centerYAnchor.constraint(equalTo: badgeContainer.centerYAnchor),
             badgeContainer.heightAnchor.constraint(equalToConstant: 28),
         ])
+
+        let bottom = badgeContainer.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -20)
+        bottom.priority = .defaultHigh
+        bottom.isActive = true
     }
 
     func update(total: Double, previousMonthTotal: Double) {
+        defer { invalidateIntrinsicContentSize() }
         let monthNames = ["January", "February", "March", "April", "May", "June",
                           "July", "August", "September", "October", "November", "December"]
         let shortMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
