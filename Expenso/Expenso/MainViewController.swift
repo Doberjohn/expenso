@@ -149,12 +149,19 @@ class MainViewController: UIViewController, AddEntryDelegate {
             seeAllLabel.centerYAnchor.constraint(equalTo: txnTitle.centerYAnchor),
             seeAllLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -pad),
 
-            // RN container fills remaining space
+        ])
+
+        // RN container constraints use lower priority to prevent the RN
+        // layout cycle (RCTSurfaceHostingView.layoutSubviews → invalidate
+        // IntrinsicContentSize) from disrupting the native constraint chain.
+        let rnConstraints = [
             rnContainer.topAnchor.constraint(equalTo: txnTitle.bottomAnchor, constant: Theme.gap),
             rnContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: pad),
             rnContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -pad),
             rnContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-        ])
+        ]
+        rnConstraints.forEach { $0.priority = .defaultHigh }
+        NSLayoutConstraint.activate(rnConstraints)
     }
 
     // MARK: - React Native
