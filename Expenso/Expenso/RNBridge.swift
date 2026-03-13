@@ -17,6 +17,14 @@ class TransactionBridge: RCTEventEmitter {
     override init() {
         super.init()
         TransactionBridge.shared = self
+
+        // Firestore data may have arrived before the bridge was ready — send it now
+        let txns = FirestoreService.shared.transactions
+        if !txns.isEmpty {
+            DispatchQueue.main.async {
+                self.sendTransactions(txns)
+            }
+        }
     }
 
     override func supportedEvents() -> [String]! {
