@@ -169,14 +169,13 @@ class MainViewController: UIViewController, AddEntryDelegate {
             initialProperties: ["transactions": initialTransactions]
         )
 
-        rootView.translatesAutoresizingMaskIntoConstraints = false
+        // Use autoresizing mask (not Auto Layout) for the RN root view.
+        // RCTSurfaceHostingView.layoutSubviews recalculates viewport offset
+        // and calls invalidateIntrinsicContentSize, which causes a cascading
+        // layout loop when connected to the Auto Layout constraint solver.
+        rootView.frame = rnContainer.bounds
+        rootView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         rnContainer.addSubview(rootView)
-        NSLayoutConstraint.activate([
-            rootView.topAnchor.constraint(equalTo: rnContainer.topAnchor),
-            rootView.leadingAnchor.constraint(equalTo: rnContainer.leadingAnchor),
-            rootView.trailingAnchor.constraint(equalTo: rnContainer.trailingAnchor),
-            rootView.bottomAnchor.constraint(equalTo: rnContainer.bottomAnchor),
-        ])
     }
 
     // MARK: - Firestore
