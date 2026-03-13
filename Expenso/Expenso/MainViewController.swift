@@ -30,6 +30,8 @@ class MainViewController: UIViewController, AddEntryDelegate {
     private let rnContainer = UIView()
     private var reactNativeFactory: RCTReactNativeFactory?
     private var reactNativeDelegate: ReactNativeDelegate?
+    private var headerTopConstraint: NSLayoutConstraint!
+    private var rnBottomConstraint: NSLayoutConstraint!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +39,17 @@ class MainViewController: UIViewController, AddEntryDelegate {
         setupUI()
         startFirestore()
         setupReactNative()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        // Use the window's safe area (device-level) to bypass any
+        // additionalSafeAreaInsets injected by RCTReactNativeFactory.
+        let safeTop = view.window?.safeAreaInsets.top ?? 59
+        let safeBottom = view.window?.safeAreaInsets.top != nil
+            ? view.window!.safeAreaInsets.bottom : 34
+        headerTopConstraint.constant = safeTop + 16
+        rnBottomConstraint.constant = -safeBottom
     }
 
     private func setupUI() {
@@ -111,9 +124,15 @@ class MainViewController: UIViewController, AddEntryDelegate {
         view.addSubview(seeAllLabel)
         view.addSubview(rnContainer)
 
+        // Pin to view.topAnchor / bottomAnchor (not safeAreaLayoutGuide)
+        // because RCTReactNativeFactory inflates additionalSafeAreaInsets.
+        // The correct offsets are applied in viewDidLayoutSubviews using
+        // the window's device-level safe area insets.
+        headerTopConstraint = headerTextStack.topAnchor.constraint(equalTo: view.topAnchor, constant: 75)
+        rnBottomConstraint = rnContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34)
+
         NSLayoutConstraint.activate([
-            // Header — pinned to safe area top
-            headerTextStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            headerTopConstraint,
             headerTextStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: pad),
             bellButton.centerYAnchor.constraint(equalTo: headerTextStack.centerYAnchor),
             bellButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -pad),
@@ -138,7 +157,7 @@ class MainViewController: UIViewController, AddEntryDelegate {
             rnContainer.topAnchor.constraint(equalTo: txnTitle.bottomAnchor, constant: Theme.gap),
             rnContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: pad),
             rnContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -pad),
-            rnContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            rnBottomConstraint,
         ])
     }
 
