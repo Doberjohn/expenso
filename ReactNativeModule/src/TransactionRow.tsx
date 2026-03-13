@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useRef } from 'react';
+import { View, Text, Alert, StyleSheet } from 'react-native';
 import ReanimatedSwipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 import Reanimated, { SharedValue, useAnimatedStyle } from 'react-native-reanimated';
 import Icon from './Icon';
@@ -54,8 +54,17 @@ function RightAction({ drag }: { drag: SharedValue<number> }) {
 }
 
 export default function TransactionRow({ transaction, onDelete }: Props) {
+  const swipeableRef = useRef<any>(null);
+
   const renderRightActions = (_progress: SharedValue<number>, drag: SharedValue<number>) => {
     return <RightAction drag={drag} />;
+  };
+
+  const handleSwipeOpen = () => {
+    Alert.alert('Delete Transaction', 'Are you sure you want to delete this transaction?', [
+      { text: 'Cancel', style: 'cancel', onPress: () => swipeableRef.current?.close() },
+      { text: 'Delete', style: 'destructive', onPress: () => onDelete(transaction.id) },
+    ]);
   };
 
   const { category, amount, paidBy, date, type } = transaction;
@@ -64,8 +73,9 @@ export default function TransactionRow({ transaction, onDelete }: Props) {
 
   return (
     <ReanimatedSwipeable
+      ref={swipeableRef}
       renderRightActions={renderRightActions}
-      onSwipeableOpen={() => onDelete(transaction.id)}
+      onSwipeableOpen={handleSwipeOpen}
       rightThreshold={80}
     >
       <View style={styles.row}>
