@@ -78,7 +78,7 @@ class MainViewController: UIViewController, AddEntryDelegate {
                                      color: Theme.green, bgColor: Theme.greenBg)
         incomeBtn.addTarget(self, action: #selector(incomeTapped), for: .touchUpInside)
 
-        let buttonsStack = UIStackView(arrangedSubviews: [expenseBtn, incomeBtn])
+        let buttonsStack = UIStackView(arrangedSubviews: [incomeBtn, expenseBtn])
         buttonsStack.axis = .horizontal
         buttonsStack.spacing = Theme.gap
         buttonsStack.distribution = .fillEqually
