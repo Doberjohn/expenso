@@ -154,7 +154,7 @@ class MainViewController: UIViewController, AddEntryDelegate {
         // RN container constraints use lower priority to prevent the RN
         // layout cycle (RCTSurfaceHostingView.layoutSubviews → invalidate
         // IntrinsicContentSize) from disrupting the native constraint chain.
-        let rnConstraints = [
+        let rnConstraints: [NSLayoutConstraint] = [
             rnContainer.topAnchor.constraint(equalTo: txnTitle.bottomAnchor, constant: Theme.gap),
             rnContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: pad),
             rnContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -pad),
