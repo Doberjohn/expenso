@@ -63,9 +63,11 @@ class MainViewController: UIViewController, AddEntryDelegate {
         headerStack.axis = .horizontal
         headerStack.distribution = .equalSpacing
         headerStack.alignment = .center
+        headerStack.setContentHuggingPriority(.required, for: .vertical)
 
         // Balance card
         balanceCard.translatesAutoresizingMaskIntoConstraints = false
+        balanceCard.setContentHuggingPriority(.required, for: .vertical)
 
         // Action buttons
         let expenseBtn = ActionButton(title: "Expense", sfSymbol: "minus",
@@ -96,9 +98,11 @@ class MainViewController: UIViewController, AddEntryDelegate {
         txnHeaderStack.axis = .horizontal
         txnHeaderStack.distribution = .equalSpacing
 
-        // RN container
+        // RN container — should expand to fill remaining space
         rnContainer.translatesAutoresizingMaskIntoConstraints = false
         rnContainer.backgroundColor = .clear
+        rnContainer.setContentHuggingPriority(.defaultLow, for: .vertical)
+        rnContainer.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
 
         // Main stack
         let mainStack = UIStackView(arrangedSubviews: [
