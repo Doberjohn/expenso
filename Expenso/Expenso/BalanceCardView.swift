@@ -26,9 +26,8 @@ class BalanceCardView: UIView {
     }
 
     override var intrinsicContentSize: CGSize {
-        layoutIfNeeded()
-        let titleH = titleLabel.intrinsicContentSize.height
-        let amountH = amountLabel.intrinsicContentSize.height
+        let titleH = titleLabel.font.lineHeight
+        let amountH = amountLabel.font.lineHeight
         let badgeH: CGFloat = 28
         // 20 top + title + 12 + amount + 12 + badge + 20 bottom
         let height = 20 + titleH + 12 + amountH + 12 + badgeH + 20
