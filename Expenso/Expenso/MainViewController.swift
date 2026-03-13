@@ -74,11 +74,6 @@ class MainViewController: UIViewController, AddEntryDelegate {
         headerTextStack.spacing = 2
         headerTextStack.translatesAutoresizingMaskIntoConstraints = false
 
-        let bellButton = UIButton(type: .system)
-        bellButton.setImage(UIImage(systemName: "bell"), for: .normal)
-        bellButton.tintColor = Theme.dark
-        bellButton.translatesAutoresizingMaskIntoConstraints = false
-
         // Balance card
         balanceCard.translatesAutoresizingMaskIntoConstraints = false
         balanceCard.setContentHuggingPriority(.required, for: .vertical)
@@ -106,12 +101,6 @@ class MainViewController: UIViewController, AddEntryDelegate {
         txnTitle.textColor = Theme.dark
         txnTitle.translatesAutoresizingMaskIntoConstraints = false
 
-        let seeAllLabel = UILabel()
-        seeAllLabel.text = "See all"
-        seeAllLabel.font = Theme.bodyMediumFont(size: 13)
-        seeAllLabel.textColor = Theme.coral
-        seeAllLabel.translatesAutoresizingMaskIntoConstraints = false
-
         // RN container
         rnContainer.translatesAutoresizingMaskIntoConstraints = false
         rnContainer.backgroundColor = .clear
@@ -120,18 +109,15 @@ class MainViewController: UIViewController, AddEntryDelegate {
         // Add subviews directly — avoids UIStackView ambiguity with views
         // that lack intrinsic content size (balanceCard, rnContainer)
         view.addSubview(headerTextStack)
-        view.addSubview(bellButton)
         view.addSubview(balanceCard)
         view.addSubview(buttonsStack)
         view.addSubview(txnTitle)
-        view.addSubview(seeAllLabel)
         view.addSubview(rnContainer)
 
         NSLayoutConstraint.activate([
             headerTextStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             headerTextStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: pad),
-            bellButton.centerYAnchor.constraint(equalTo: headerTextStack.centerYAnchor),
-            bellButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -pad),
+            headerTextStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -pad),
 
             // Balance card
             balanceCard.topAnchor.constraint(equalTo: headerTextStack.bottomAnchor, constant: gap),
@@ -146,8 +132,6 @@ class MainViewController: UIViewController, AddEntryDelegate {
             // Transactions header
             txnTitle.topAnchor.constraint(equalTo: buttonsStack.bottomAnchor, constant: gap),
             txnTitle.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: pad),
-            seeAllLabel.centerYAnchor.constraint(equalTo: txnTitle.centerYAnchor),
-            seeAllLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -pad),
 
         ])
 
