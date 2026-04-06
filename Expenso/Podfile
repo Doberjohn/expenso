@@ -29,5 +29,14 @@ target 'Expenso' do
       '../ReactNativeModule/node_modules/react-native',
       :mac_catalyst_enabled => false
     )
+
+    # Workaround for fmt consteval errors with Xcode 26+ Clang
+    installer.pods_project.targets.each do |target|
+      if target.name == 'fmt'
+        target.build_configurations.each do |config|
+          config.build_settings['OTHER_CPLUSPLUSFLAGS'] = '$(inherited) -DFMT_CONSTEVAL=constexpr'
+        end
+      end
+    end
   end
 end
