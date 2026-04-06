@@ -1,5 +1,14 @@
 require_relative '../ReactNativeModule/node_modules/react-native/scripts/react_native_pods'
 
+node_modules_path = File.expand_path('../ReactNativeModule/node_modules', __dir__)
+ENV['REACT_NATIVE_NODE_MODULES_DIR'] = node_modules_path
+
+# Symlink node_modules into Expenso/ so Node can resolve react-native from here
+local_node_modules = File.join(__dir__, 'node_modules')
+unless File.exist?(local_node_modules)
+  File.symlink('../ReactNativeModule/node_modules', local_node_modules)
+end
+
 platform :ios, '16.0'
 prepare_react_native_project!
 
@@ -10,7 +19,6 @@ target 'Expenso' do
     :hermes_enabled => true
   )
 
-  ENV['REACT_NATIVE_NODE_MODULES_DIR'] = File.expand_path('../ReactNativeModule/node_modules', __dir__)
   pod 'RNReanimated', :path => '../ReactNativeModule/node_modules/react-native-reanimated'
   pod 'RNGestureHandler', :path => '../ReactNativeModule/node_modules/react-native-gesture-handler'
   pod 'RNSVG', :path => '../ReactNativeModule/node_modules/react-native-svg'
