@@ -67,9 +67,10 @@ export default function TransactionRow({ transaction, onDelete }: Props) {
     ]);
   };
 
-  const { category, amount, paidBy, date, type } = transaction;
+  const { category, amount, paidBy, date, type, note } = transaction;
   const isIncome = type === 'income';
   const formattedAmount = `${isIncome ? '+' : '-'}€${amount.toFixed(2)}`;
+  const displayName = category.name === 'Άλλο' && note ? note : category.name;
 
   return (
     <ReanimatedSwipeable
@@ -83,7 +84,7 @@ export default function TransactionRow({ transaction, onDelete }: Props) {
           <Icon name={category.icon} size={20} color={category.color} />
         </View>
         <View style={styles.info}>
-          <Text style={styles.name}>{category.name}</Text>
+          <Text style={styles.name}>{displayName}</Text>
           <Text style={styles.sub}>{paidBy} · {formatDate(date)}</Text>
         </View>
         <Text style={[styles.amount, isIncome && { color: colors.green }]}>
