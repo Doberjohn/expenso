@@ -94,32 +94,20 @@ class BalanceCardView: UIView {
         bottom.isActive = true
     }
 
-    func update(total: Double, previousMonthTotal: Double) {
+    func update(total: Double, currentMonthTotal: Double) {
         defer { invalidateIntrinsicContentSize() }
-        let monthNames = ["January", "February", "March", "April", "May", "June",
-                          "July", "August", "September", "October", "November", "December"]
         let shortMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         let month = Calendar.current.component(.month, from: Date()) - 1
 
-        titleLabel.text = "Total Balance — \(monthNames[month])"
+        titleLabel.text = "Total Balance"
         amountLabel.text = String(format: "€%.2f", total)
 
-        if previousMonthTotal != 0 {
-            let diff = ((total - previousMonthTotal) / abs(previousMonthTotal)) * 100
-            let absDiff = Int(abs(diff.rounded()))
-            if absDiff > 0 {
-                let isMore = diff > 0
-                let prevMonthName = shortMonths[(month + 11) % 12]
-                let symbolName = isMore ? "arrow.up.right" : "arrow.down.right"
-                badgeIcon.image = UIImage(systemName: symbolName)
-                badgeLabel.text = "\(absDiff)% \(isMore ? "more" : "less") than \(prevMonthName)"
-                badgeContainer.isHidden = false
-            } else {
-                badgeContainer.isHidden = true
-            }
-        } else {
-            badgeContainer.isHidden = true
-        }
+        let sign = currentMonthTotal >= 0 ? "+" : ""
+        let symbolName = currentMonthTotal >= 0 ? "arrow.up.right" : "arrow.down.right"
+        let monthName = shortMonths[month]
+        badgeIcon.image = UIImage(systemName: symbolName)
+        badgeLabel.text = "\(sign)\(String(format: "€%.2f", currentMonthTotal)) in \(monthName)"
+        badgeContainer.isHidden = false
     }
 }
