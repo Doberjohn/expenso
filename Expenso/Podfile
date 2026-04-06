@@ -9,28 +9,6 @@ unless File.exist?(local_node_modules)
   File.symlink('../ReactNativeModule/node_modules', local_node_modules)
 end
 
-# Workaround for fmt consteval errors with Xcode 26+ Clang.
-# fmt 11.0.2 uses consteval which Xcode 26's Clang rejects.
-# Patch the fmt podspec to add FMT_USE_CONSTEVAL=0 via GCC_PREPROCESSOR_DEFINITIONS
-# (not compiler_flags, which only sets OTHER_CFLAGS and doesn't affect .cc C++ files).
-fmt_podspec_path = File.expand_path('../ReactNativeModule/node_modules/react-native/third-party-podspecs/fmt.podspec', __dir__)
-if File.exist?(fmt_podspec_path)
-  fmt_content = File.read(fmt_podspec_path)
-  unless fmt_content.include?('GCC_PREPROCESSOR_DEFINITIONS')
-    # Remove any stale compiler_flags patch from previous attempts
-    fmt_content.gsub!(/\s*spec\.compiler_flags\s*=\s*'[^']*FMT_[^']*'\n/, "\n")
-    patched = fmt_content.gsub(
-      '"GCC_WARN_INHIBIT_ALL_WARNINGS" => "YES"',
-      '"GCC_WARN_INHIBIT_ALL_WARNINGS" => "YES",
-    "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) FMT_USE_CONSTEVAL=0"'
-    )
-    if patched != fmt_content
-      File.write(fmt_podspec_path, patched)
-      Pod::UI.puts "[Expenso] Patched fmt.podspec with FMT_USE_CONSTEVAL=0 for Xcode 26"
-    end
-  end
-end
-
 platform :ios, '16.0'
 prepare_react_native_project!
 
@@ -51,5 +29,18 @@ target 'Expenso' do
       '../ReactNativeModule/node_modules/react-native',
       :mac_catalyst_enabled => false
     )
+
+    # Workaround for fmt 11.0.2 consteval errors with Xcode 26+ Clang.
+    # Directly patch the fetched fmt source to replace consteval with constexpr.
+    %w[base.h format.h format-inl.h].each do |header|
+      path = File.join(installer.sandbox.root, 'fmt', 'include', 'fmt', header)
+      next unless File.exist?(path)
+      content = File.read(path)
+      patched = content.gsub(/\bconsteval\b/, 'constexpr')
+      if patched != content
+        File.write(path, patched)
+        Pod::UI.puts "[Expenso] Patched #{header}: consteval -> constexpr (Xcode 26 fix)"
+      end
+    end
   end
 end
