@@ -10,6 +10,7 @@ target 'Expenso' do
     :hermes_enabled => true
   )
 
+  ENV['REACT_NATIVE_NODE_MODULES_DIR'] = File.expand_path('../ReactNativeModule/node_modules', __dir__)
   pod 'RNReanimated', :path => '../ReactNativeModule/node_modules/react-native-reanimated'
   pod 'RNGestureHandler', :path => '../ReactNativeModule/node_modules/react-native-gesture-handler'
   pod 'RNSVG', :path => '../ReactNativeModule/node_modules/react-native-svg'
