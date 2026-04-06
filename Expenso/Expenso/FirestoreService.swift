@@ -60,7 +60,7 @@ class FirestoreService {
             }
 
             self.onTransactionsUpdate?(self.transactions)
-            self.onTotalsUpdate?(self.currentMonthTotal, self.previousMonthTotal)
+            self.onTotalsUpdate?(self.grandTotal, self.currentMonthTotal)
         }
     }
 
@@ -88,6 +88,12 @@ class FirestoreService {
     }
 
     // MARK: - Totals
+
+    var grandTotal: Double {
+        transactions.reduce(0.0) { sum, t in
+            t.type == .income ? sum + t.amount : sum - t.amount
+        }
+    }
 
     var currentMonthTotal: Double {
         let now = Date()
