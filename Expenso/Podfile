@@ -9,6 +9,21 @@ unless File.exist?(local_node_modules)
   File.symlink('../ReactNativeModule/node_modules', local_node_modules)
 end
 
+# Workaround for fmt consteval errors with Xcode 26+ Clang.
+# Patch the fmt podspec before CocoaPods resolves dependencies,
+# so the compiler flags are baked into the generated xcconfig files.
+fmt_podspec_path = File.expand_path('../ReactNativeModule/node_modules/react-native/third-party-podspecs/fmt.podspec', __dir__)
+if File.exist?(fmt_podspec_path)
+  fmt_content = File.read(fmt_podspec_path)
+  unless fmt_content.include?('FMT_CONSTEVAL')
+    patched = fmt_content.gsub(
+      'spec.source_files = ["include/fmt/*.h", "src/format.cc"]',
+      "spec.compiler_flags = '-DFMT_USE_CONSTEVAL=0 -DFMT_CONSTEVAL=constexpr'\n  spec.source_files = [\"include/fmt/*.h\", \"src/format.cc\"]"
+    )
+    File.write(fmt_podspec_path, patched)
+  end
+end
+
 platform :ios, '16.0'
 prepare_react_native_project!
 
@@ -29,23 +44,5 @@ target 'Expenso' do
       '../ReactNativeModule/node_modules/react-native',
       :mac_catalyst_enabled => false
     )
-
-    # Workaround for fmt consteval errors with Xcode 26+ Clang
-    # Patch the generated xcconfig files directly, since build settings
-    # set on the Xcode target are overridden by xcconfig files.
-    Dir.glob(File.join(installer.sandbox.root, 'Target Support Files', 'fmt', '*.xcconfig')).each do |xcconfig_path|
-      content = File.read(xcconfig_path)
-      unless content.include?('FMT_CONSTEVAL')
-        content = content.gsub(
-          /^OTHER_CPLUSPLUSFLAGS = (.*)$/,
-          'OTHER_CPLUSPLUSFLAGS = \1 -DFMT_USE_CONSTEVAL=0 -DFMT_CONSTEVAL=constexpr'
-        )
-        # If no existing OTHER_CPLUSPLUSFLAGS, append it
-        unless content.include?('OTHER_CPLUSPLUSFLAGS')
-          content += "\nOTHER_CPLUSPLUSFLAGS = $(inherited) -DFMT_USE_CONSTEVAL=0 -DFMT_CONSTEVAL=constexpr\n"
-        end
-        File.write(xcconfig_path, content)
-      end
-    end
   end
 end
