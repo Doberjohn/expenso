@@ -31,11 +31,20 @@ target 'Expenso' do
     )
 
     # Workaround for fmt consteval errors with Xcode 26+ Clang
-    installer.pods_project.targets.each do |target|
-      if target.name == 'fmt'
-        target.build_configurations.each do |config|
-          config.build_settings['OTHER_CPLUSPLUSFLAGS'] = '$(inherited) -DFMT_CONSTEVAL=constexpr'
+    # Patch the generated xcconfig files directly, since build settings
+    # set on the Xcode target are overridden by xcconfig files.
+    Dir.glob(File.join(installer.sandbox.root, 'Target Support Files', 'fmt', '*.xcconfig')).each do |xcconfig_path|
+      content = File.read(xcconfig_path)
+      unless content.include?('FMT_CONSTEVAL')
+        content = content.gsub(
+          /^OTHER_CPLUSPLUSFLAGS = (.*)$/,
+          'OTHER_CPLUSPLUSFLAGS = \1 -DFMT_USE_CONSTEVAL=0 -DFMT_CONSTEVAL=constexpr'
+        )
+        # If no existing OTHER_CPLUSPLUSFLAGS, append it
+        unless content.include?('OTHER_CPLUSPLUSFLAGS')
+          content += "\nOTHER_CPLUSPLUSFLAGS = $(inherited) -DFMT_USE_CONSTEVAL=0 -DFMT_CONSTEVAL=constexpr\n"
         end
+        File.write(xcconfig_path, content)
       end
     end
   end
