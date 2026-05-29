@@ -67,9 +67,10 @@ export default function TransactionRow({ transaction, onDelete }: Props) {
     ]);
   };
 
-  const { category, amount, paidBy, date, type } = transaction;
+  const { category, amount, paidBy, date, type, note } = transaction;
   const isIncome = type === 'income';
   const formattedAmount = `${isIncome ? '+' : '-'}€${amount.toFixed(2)}`;
+  const showNote = category.name === 'Άλλο' && !!note;
 
   return (
     <ReanimatedSwipeable
@@ -84,6 +85,7 @@ export default function TransactionRow({ transaction, onDelete }: Props) {
         </View>
         <View style={styles.info}>
           <Text style={styles.name}>{category.name}</Text>
+          {showNote && <Text style={styles.note}>{note}</Text>}
           <Text style={styles.sub}>{paidBy} · {formatDate(date)}</Text>
         </View>
         <Text style={[styles.amount, isIncome && { color: colors.green }]}>
@@ -118,6 +120,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: fonts.bodySemiBold,
     color: colors.dark,
+  },
+  note: {
+    fontSize: 13,
+    fontFamily: fonts.bodyMedium,
+    color: colors.muted,
   },
   sub: {
     fontSize: 12,

@@ -16,6 +16,7 @@ struct Theme {
     static let cardBg      = UIColor(hex: "#F6F7F8")
     static let white       = UIColor.white
     static let purple      = UIColor(hex: "#8B5CF6")
+    static let purpleBg    = UIColor(hex: "#F5F3FF")
     static let indigo      = UIColor(hex: "#6366F1")
     static let green       = UIColor(hex: "#22C55E")
     static let amber       = UIColor(hex: "#D97706")

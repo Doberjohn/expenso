@@ -30,21 +30,16 @@ target 'Expenso' do
       :mac_catalyst_enabled => false
     )
 
-    # Workaround for fmt consteval errors with Xcode 26+ Clang
-    # Patch the generated xcconfig files directly, since build settings
-    # set on the Xcode target are overridden by xcconfig files.
-    Dir.glob(File.join(installer.sandbox.root, 'Target Support Files', 'fmt', '*.xcconfig')).each do |xcconfig_path|
-      content = File.read(xcconfig_path)
-      unless content.include?('FMT_CONSTEVAL')
-        content = content.gsub(
-          /^OTHER_CPLUSPLUSFLAGS = (.*)$/,
-          'OTHER_CPLUSPLUSFLAGS = \1 -DFMT_USE_CONSTEVAL=0 -DFMT_CONSTEVAL=constexpr'
-        )
-        # If no existing OTHER_CPLUSPLUSFLAGS, append it
-        unless content.include?('OTHER_CPLUSPLUSFLAGS')
-          content += "\nOTHER_CPLUSPLUSFLAGS = $(inherited) -DFMT_USE_CONSTEVAL=0 -DFMT_CONSTEVAL=constexpr\n"
-        end
-        File.write(xcconfig_path, content)
+    # Workaround for fmt 11.0.2 consteval errors with Xcode 26+ Clang.
+    # Directly patch the fetched fmt source to replace consteval with constexpr.
+    %w[base.h format.h format-inl.h].each do |header|
+      path = File.join(installer.sandbox.root, 'fmt', 'include', 'fmt', header)
+      next unless File.exist?(path)
+      content = File.read(path)
+      patched = content.gsub(/\bconsteval\b/, 'constexpr')
+      if patched != content
+        File.write(path, patched)
+        Pod::UI.puts "[Expenso] Patched #{header}: consteval -> constexpr (Xcode 26 fix)"
       end
     end
   end
