@@ -25,6 +25,7 @@ struct Category {
 let categories: [Category] = [
     Category(name: "Λαϊκή",       sfSymbol: "basket.fill",          color: Theme.amber,  bgColor: Theme.amberBg,  type: .expense),
     Category(name: "Supermarket",  sfSymbol: "cart.fill",            color: Theme.indigo,  bgColor: Theme.indigoBg, type: .expense),
+    Category(name: "Βενζίνη",      sfSymbol: "fuelpump.fill",        color: Theme.purple,  bgColor: Theme.purpleBg, type: .expense),
     Category(name: "Διατροφολόγος", sfSymbol: "leaf.fill",           color: Theme.green,  bgColor: Theme.greenBg,  type: .expense),
     Category(name: "Φαγητό",       sfSymbol: "fork.knife",           color: Theme.indigo,  bgColor: Theme.indigoBg, type: .expense),
     Category(name: "Καφές",        sfSymbol: "cup.and.saucer.fill",  color: Theme.amber,  bgColor: Theme.amberBg,  type: .expense),

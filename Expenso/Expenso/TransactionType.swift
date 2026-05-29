@@ -56,6 +56,7 @@ struct Transaction: Identifiable {
         let map: [String: String] = [
             "Λαϊκή": "ShoppingBasket",
             "Supermarket": "ShoppingCart",
+            "Βενζίνη": "Fuel",
             "Διατροφολόγος": "Apple",
             "Φαγητό": "Utensils",
             "Καφές": "Coffee",
