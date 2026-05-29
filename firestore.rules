@@ -1,0 +1,43 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── transactions collection ──────────────────────────────────
+    match /transactions/{docId} {
+
+      // Anyone can read transactions (no auth in the app yet)
+      allow read: if true;
+
+      // Validate structure on create
+      allow create: if isValidTransaction(request.resource.data);
+
+      // Validate structure on update (all required fields must stay valid)
+      allow update: if isValidTransaction(request.resource.data);
+
+      // Allow deletes (the app supports swipe-to-delete)
+      allow delete: if true;
+    }
+
+    // ── Deny everything else ─────────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+// ── Validation helper ──────────────────────────────────────────
+function isValidTransaction(data) {
+  return data.keys().hasAll(['amount', 'type', 'category', 'paidBy', 'date', 'createdAt'])
+      && data.amount is number
+      && data.amount > 0
+      && data.type is string
+      && data.type in ['expense', 'income']
+      && data.category is string
+      && data.category.size() > 0
+      && data.paidBy is string
+      && data.paidBy in ['John', 'Christina']
+      && data.date is timestamp
+      && data.createdAt is timestamp
+      && data.note is string;
+}
