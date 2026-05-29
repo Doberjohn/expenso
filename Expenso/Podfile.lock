@@ -1802,6 +1802,55 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - RNSVG (15.15.3):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.11.18.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - RNSVG/common (= 15.15.3)
+    - Yoga
+  - RNSVG/common (15.15.3):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.11.18.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-hermes
+    - React-ImageManager
+    - React-jsi
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-renderercss
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - SocketRocket (0.7.1)
   - Yoga (0.0.0)
 
@@ -1879,6 +1928,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../ReactNativeModule/node_modules/react-native/ReactCommon`)
   - RNGestureHandler (from `../ReactNativeModule/node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../ReactNativeModule/node_modules/react-native-reanimated`)
+  - RNSVG (from `../ReactNativeModule/node_modules/react-native-svg`)
   - Yoga (from `../ReactNativeModule/node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -2029,6 +2079,8 @@ EXTERNAL SOURCES:
     :path: "../ReactNativeModule/node_modules/react-native-gesture-handler"
   RNReanimated:
     :path: "../ReactNativeModule/node_modules/react-native-reanimated"
+  RNSVG:
+    :path: "../ReactNativeModule/node_modules/react-native-svg"
   Yoga:
     :path: "../ReactNativeModule/node_modules/react-native/ReactCommon/yoga"
 
@@ -2037,7 +2089,7 @@ SPEC CHECKSUMS:
   DoubleConversion: cb417026b2400c8f53ae97020b2be961b59470cb
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
   FBLazyVector: 84b955f7b4da8b895faf5946f73748267347c975
-  fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
+  fmt: 99ada462aeb7eae2465acec656ccb56baf04c650
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: 314be5250afa5692b57b4dd1705959e1973a8ebe
   RCT-Folly: e78785aa9ba2ed998ea4151e314036f6c49e6d82
@@ -2104,9 +2156,10 @@ SPEC CHECKSUMS:
   ReactCommon: 76d2dc87136d0a667678668b86f0fca0c16fdeb0
   RNGestureHandler: 4d34255948b634d4f3827cc534a1a3d05e50095b
   RNReanimated: 4d4dba6f24545ef88a2c85a79908431190825389
+  RNSVG: daa45ddcc2e01ef3eb8d20f59c29beb68cec3933
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: c758bfb934100bb4bf9cbaccb52557cee35e8bdf
 
-PODFILE CHECKSUM: 9bf135efc098720ac979de5ee95d31ec64181f34
+PODFILE CHECKSUM: 6a26324631dfbbc9334ea4614412403da3da37f6
 
 COCOAPODS: 1.16.2

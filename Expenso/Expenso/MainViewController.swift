@@ -174,7 +174,7 @@ class MainViewController: UIViewController, AddEntryDelegate {
     private func startFirestore() {
         FirestoreService.shared.onTotalsUpdate = { [weak self] current, previous in
             DispatchQueue.main.async {
-                self?.balanceCard.update(total: current, previousMonthTotal: previous)
+              self?.balanceCard.update(total: current, currentMonthTotal: previous)
             }
         }
 
